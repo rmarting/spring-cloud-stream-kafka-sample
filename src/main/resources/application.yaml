@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: kafka-aquanima-kafka-bootstrap:9092
+          # brokers: localhost:9092
+          auto-create-topics: false
+          configuration:
+            auto.offset.reset: earliest
+            fetch.max.wait.ms: 10000
+            #reconnect.backoff.ms: 5000
+            #request.timeout.ms: 605000
+            #retry.backoff.ms: 10000
+            session.timeout.ms: 30000
+      bindings:
+        greetings-in:
+          destination: greetings-sample
+          group: greetings-group
+          contentType: application/json
+        greetings-out:
+          destination: greetings-sample
+          contentType: application/json
