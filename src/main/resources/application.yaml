@@ -3,16 +3,11 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: kafka-aquanima-kafka-bootstrap:9092
+          brokers: my-kafka-kafka-bootstrap:9092
           # brokers: localhost:9092
           auto-create-topics: false
           configuration:
-            auto.offset.reset: earliest
-            fetch.max.wait.ms: 10000
-            #reconnect.backoff.ms: 5000
-            #request.timeout.ms: 605000
-            #retry.backoff.ms: 10000
-            session.timeout.ms: 30000
+            auto.offset.reset: latest
       bindings:
         greetings-in:
           destination: greetings-sample
