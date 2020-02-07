@@ -38,8 +38,8 @@ continuous integration, deployments, and updates - with Kubernetes.
 
 ### Kubernetes and OpenShift Platform
 
-This tutorial requires a Kubernetes and Openshift platform available. If you do not have one, you could use 
-one of the following resources to deploy locally a Kubernetes and OpenShift Cluster:
+This tutorial requires a Kubernetes or OpenShift platform available. If you do not have one, you could use 
+one of the following resources to deploy locally a Kubernetes or OpenShift Cluster:
 
 * [minishift - run OpenShift locally](https://github.com/minishift/minishift)
 * [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/overview/)  
@@ -49,7 +49,7 @@ one of the following resources to deploy locally a Kubernetes and OpenShift Clus
 
 ### Deploying Kafka
 
-Strimzi includes a set of Kubernetes Operators to deploy a full Kafka Cluster on a Kubernetes and OpenShift platform.
+Strimzi includes a set of Kubernetes Operators to deploy a full Kafka Cluster on a Kubernetes or OpenShift platform.
 
 You can follow the instructions from [Community Documentation](https://strimzi.io/docs/latest/#downloads-str) or you
 could use my [Ansible Playbook](https://github.com/rmarting/strimzi-ansible-playbook) to do it. In both cases it is 
@@ -62,15 +62,15 @@ To deploy the Kafka Cluster:
 
 * Kubernetes:
 
-```
-$ kubectl apply -f src/main/strimz/kafka.yml -n <NAMESPACE>
+```bash
+$ kubectl apply -f src/main/strimz/kafka.yml -n namespace
 kafka.kafka.strimzi.io/my-kafka created
 ```
 
 * OpenShift:
 
-```
-$ oc apply -f src/main/strimz/kafka.yml -n <NAMESPACE>
+```bash
+$ oc apply -f src/main/strimz/kafka.yml -n namespace
 kafka.kafka.strimzi.io/my-kafka created
 ```
 
@@ -78,31 +78,32 @@ To deploy the Kafka Topic:
 
 * Kubernetes:
 
-```
-$ kubectl apply -f src/main/strimz/kafkatopic.yml -n <NAMESPACE>
+```bash
+$ kubectl apply -f src/main/strimz/kafkatopic.yml -n namespace
 kafkatopic.kafka.strimzi.io/greetings-sample created
 ```
 
 * OpenShift:
 
-```
-$ oc apply -f src/main/strimz/kafkatopic.yml -n <NAMESPACE>
+```bash
+$ oc apply -f src/main/strimz/kafkatopic.yml -n namespace
 kafkatopic.kafka.strimzi.io/greetings-sample created
 ```
 
 After some minutes Kafka Cluster will be deployed:
 
-```
+```bash
 $ kubectl get pod
-NAME                                           READY     STATUS      RESTARTS   AGE
-my-kafka-entity-operator-85cd57f94d-x6h2w      3/3       Running     0          1m
-my-kafka-kafka-0                               2/2       Running     1          3m
-my-kafka-kafka-1                               2/2       Running     0          3m
-my-kafka-kafka-2                               2/2       Running     0          3m
-my-kafka-zookeeper-0                           2/2       Running     0          4m
-my-kafka-zookeeper-1                           2/2       Running     0          4m
-my-kafka-zookeeper-2                           2/2       Running     0          4m
-strimzi-cluster-operator-c8d786dcb-8rt9v       1/1       Running     2          5d
+NAME                                           READY   STATUS    RESTARTS   AGE
+my-kafka-entity-operator-8474bb6769-xqzt9      3/3     Running   0          1m
+my-kafka-kafka-0                               2/2     Running   0          2m
+my-kafka-kafka-1                               2/2     Running   0          2m
+my-kafka-kafka-2                               2/2     Running   0          2m
+my-kafka-kafka-exporter-5b4dff4858-8z9gw       1/1     Running   0          30s
+my-kafka-zookeeper-0                           2/2     Running   0          3m
+my-kafka-zookeeper-1                           2/2     Running   0          3m
+my-kafka-zookeeper-2                           2/2     Running   0          3m
+strimzi-cluster-operator-c8d786dcb-8rt9v       1/1     Running   2          5d
 ```
 
 ### Project Structure
@@ -117,57 +118,57 @@ Notice the maven dependencies in the ```pom.xml``` file:
 
 * Spring Boot and Spring Cloud Dependencies
 
-```
-  <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-  </dependency>
-  <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-  </dependency>
-  <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-stream</artifactId>
-  </dependency>
-  <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-stream-kafka</artifactId>
-  </dependency>
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-stream</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+</dependency>
 
-  <!-- hot reload - press Ctrl+F9 in IntelliJ after a code change while application is running -->
-  <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <optional>true</optional>
-  </dependency>
+<!-- hot reload - press Ctrl+F9 in IntelliJ after a code change while application is running -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-devtools</artifactId>
+  <optional>true</optional>
+</dependency>
 ```
 
 * Other Dependencies
 
-```
-  <!-- Also install the Lombok plugin in your IDE -->
-  <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-  </dependency>
+```xml
+<!-- Also install the Lombok plugin in your IDE -->
+<dependency>
+  <groupId>org.projectlombok</groupId>
+  <artifactId>lombok</artifactId>
+  <optional>true</optional>
+</dependency>
 ```
 
 These dependencies are managed by ```<dependencyManagement>``` section:
 
-```
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
 ```
 
 ### Define the Kafka streams
@@ -178,7 +179,7 @@ messages to a Kafka topic, and an inbound stream to read messages from a Kafka t
 Spring Cloud provides a convenient way to do this by simply creating an interface that defines a separate method 
 for each stream.
 
-```
+```java
 package com.jromanmartin.kafka.streams.stream;
 
 import org.springframework.cloud.stream.annotation.Input;
@@ -213,7 +214,7 @@ Our next step is to configure Spring Cloud Stream to bind to our streams in the 
 This can be done by creating a ```@Configuration``` class ```com.jromanmartin.kafka.streams.config.StreamsConfig``` with 
 below code:
 
-```
+```java
 package com.jromanmartin.kafka.streams.config;
 
 import com.jromanmartin.kafka.streams.stream.GreetingsStreams;
@@ -230,7 +231,7 @@ Binding the streams is done using the ```@EnableBinding``` annotation where the 
 
 By default, the configuration properties are stored in the ```src/main/resources/application.yaml``` file.
 
-```
+```yaml
 spring:
   cloud:
     stream:
@@ -243,6 +244,7 @@ spring:
       bindings:
         greetings-in:
           destination: greetings
+          group: greetings-in-group
           contentType: application/json
         greetings-out:
           destination: greetings
@@ -252,8 +254,8 @@ spring:
 The above configuration properties configure the address of the Kafka server to connect to, and the Kafka topic we use 
 for both the inbound and outbound streams in our code. They both must use the same Kafka topic!
 
-Kafka brokers are defined by a Kubernetes and OpenShift service created by Strimzi when the Kafka cluster is deployed. This
-service, called *cluster-name*-kafka-boostrap exposes 9092 port for plain traffic and 9093 for encrypted traffic.  
+Kafka brokers are defined by a Kubernetes or OpenShift service created by Strimzi when the Kafka cluster is deployed. This
+service, called *cluster-name*-kafka-bootstrap exposes 9092 port for plain traffic and 9093 for encrypted traffic.  
 
 The ```contentType``` properties tell Spring Cloud Stream to send/receive our message objects as ```String```s in the streams.
 
@@ -262,7 +264,7 @@ The ```contentType``` properties tell Spring Cloud Stream to send/receive our me
 Create a simple ```com.jromanmartin.kafka.streams.model.Greetings``` class with below code that will represent 
 the message object we read from and write to the ```greetings``` Kafka topic:
 
-```
+```java
 package com.jromanmartin.kafka.streams.model;
 
 // lombok autogenerates getters, setters, toString() and a builder (see https://projectlombok.org/):
@@ -287,7 +289,7 @@ creating ```Greetings``` objects using fluent builder (see below).
 Let's create the ```com.jromanmartin.kafka.streams.service.GreetingsService``` class with below code that will 
 write a ```Greetings``` object to the ```greetings``` Kafka topic:
 
-```
+```java
 package com.jromanmartin.kafka.streams.service;
 
 import com.jromanmartin.kafka.streams.model.Greetings;
@@ -332,7 +334,7 @@ In the ```sendGreeting()``` method we use the injected ```GreetingsStream``` obj
 
 Now we'll be creating a REST API endpoint that will trigger sending a message to Kafka using the ```GreetingsService``` Spring Bean:
 
-```
+```java
 package com.jromanmartin.kafka.streams.web;
 
 import com.jromanmartin.kafka.streams.model.Greetings;
@@ -376,7 +378,7 @@ the ```sendGreeting()``` method in ```GreetingsService```.
 Let's create a ```com.jromanmartin.kafka.streams.service.GreetingsListener``` class that will listen to messages 
 on the ```greetings``` Kafka topic and log them on the console:
 
-```
+```java
 package com.jromanmartin.kafka.streams.service;
 
 import com.jromanmartin.kafka.streams.model.Greetings;
@@ -414,9 +416,10 @@ the record as: partition id, offset, ...
 
 ### Running the application
 
-The last piece of the puzzle is the ```com.jromanmartin.kafka.streams.StreamKafkaApplication``` class that was auto-generated by the Spring Initializer:
+The last piece of the puzzle is the ```com.jromanmartin.kafka.streams.StreamKafkaApplication``` class that was
+auto-generated by the Spring Initializer:
 
-```
+```java
 package com.jromanmartin.kafka.streams;
 
 import org.springframework.boot.SpringApplication;
@@ -435,23 +438,50 @@ public class StreamKafkaApplication {
 No need to make any changes here. You can either run this class as a Java application from your IDE, or run the application 
 from the command line using the Spring Boot maven plugin:
 
-```
+```bash
 $ mvn spring-boot:run
 ```
 
-Or you can deploy into Kubernetes and OpenShift platform using Fabric8 Maven plugin: 
+Or you can deploy into Kubernetes or OpenShift platform using [Eclipse JKube](https://github.com/eclipse/jkube) Maven Plug-ins: 
 
+For Kubernetes:
+
+```bash
+$ mvn k8s:build k8s:resource k8s:apply -Pkubernetes
 ```
-$ mvn fabric8:deploy -Popenshift
+
+For OpenShift:
+
+```bash
+$ mvn oc:build oc:resource oc:apply -Popenshift
 ```
 
 Once the application is running, go to ```http://<KUBERNETES_OPENSHIFT_HOST>/greetings?message=hello``` in the browser 
 and check your console.
 
+To get the route the following command in Kubernetes give you the host:
+
+```bash
+$ kubectl get route spring-cloud-stream-kafka-sample -o jsonpath='{.spec.host}'
 ```
-2019-04-07 18:45:20.923  INFO 1 --- [nio-8080-exec-6] c.j.k.streams.service.GreetingsService   : Sending greetings Greetings(timestamp=1554662720923, message=hello)
-2019-04-07 18:45:20.970  INFO 1 --- [nio-8080-exec-6] c.j.k.streams.service.GreetingsService   : Sent true greetings Greetings(timestamp=1554662720923, message=hello)
-2019-04-07 18:45:20.978  INFO 1 --- [container-0-C-1] c.j.k.streams.service.GreetingsListener  : Received greetings: Greetings(timestamp=1554662720923, message=hello). Partition: 0. Offset: 26
+
+In OpenShift:
+
+```bash
+$ oc get route spring-cloud-stream-kafka-sample -o jsonpath='{.spec.host}'
+```
+
+This command will send a message to the Kafka Topic:
+
+```bash
+curl http://$(oc get route spring-cloud-stream-kafka-sample -o jsonpath='{.spec.host}')//greetings?message=hello; echo
+{"timestamp":1581086660762,"message":"hello"}
+```
+
+```text
+2020-02-07 14:44:20.762  INFO 1 --- [nio-8080-exec-2] c.j.k.streams.service.GreetingsService   : Sending greetings Greetings(timestamp=1581086660762, message=hello)
+2020-02-07 14:44:20.763  INFO 1 --- [nio-8080-exec-2] c.j.k.streams.service.GreetingsService   : Sent true greetings Greetings(timestamp=1581086660762, message=hello)
+2020-02-07 14:44:20.770  INFO 1 --- [container-0-C-1] c.j.k.streams.service.GreetingsListener  : Received greetings: Greetings(timestamp=1581086660762, message=hello). Partition: 1. Offset: 1
 ```
 
 ### Summary
