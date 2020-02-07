@@ -4,14 +4,14 @@ spring:
       kafka:
         binder:
           brokers: my-kafka-kafka-bootstrap:9092
-          # brokers: localhost:9092
-          auto-create-topics: false
+          #brokers: rh8amq01:9092,rh8amq02:9092,rh8amq03:9092
+          auto-create-topics: true
           configuration:
             auto.offset.reset: latest
       bindings:
         greetings-in:
           destination: greetings-sample
-          group: greetings-group
+          group: greetings-in-group
           contentType: application/json
         greetings-out:
           destination: greetings-sample
