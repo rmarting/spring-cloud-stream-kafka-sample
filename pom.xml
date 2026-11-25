@@ -21,7 +21,7 @@
         <java.version>1.8</java.version>
 
         <!-- Spring Boot -->
-        <spring-cloud.version>Hoxton.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
     </properties>
 
     <dependencyManagement>
