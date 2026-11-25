@@ -116,7 +116,7 @@
                    <plugin>
                        <groupId>org.eclipse.jkube</groupId>
                        <artifactId>k8s-maven-plugin</artifactId>
-                       <version>0.1.0</version>
+                       <version>0.2.0</version>
                        <executions>
                            <execution>
                                <goals>
